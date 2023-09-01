@@ -35,7 +35,7 @@ public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 	@Override
 	public GeoLocationAPICustomResponse getGeoIPLocationDetails(GeoAPIRequest request) throws Exception {
 		// TODO Auto-generated method stub
-		logger.debug("Calling validate method of ValidateService : {} from getIPDetails()", request);
+		logger.debug("Calling validate method of ValidateService : {} from getGeoIPLocationDetails()", request);
 		validateService.validate(request);
 
 		GeoLocationAPIResponse response = client.getIPDetailsByIp(request.getIP());
@@ -49,6 +49,10 @@ public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 
 	private void handleInvalidIpCountry(GeoLocationAPIResponse response) {
 		// TODO Auto-generated method stub
+		logger.debug(
+				"Calling handleInvalidIpCountry method of GeoLocationAPIServiceImpl : {} from getGeoIPLocationDetails()",
+				response);
+
 		if (response.getCountryCode() == null || !response.getCountryCode().equals(countryCode)) {
 			throw new InvalidCountryException("IP address does not belong to canada");
 		}
@@ -56,6 +60,9 @@ public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 
 	private void handleInvalidResponse(GeoLocationAPIResponse response) {
 		// TODO Auto-generated method stub
+		logger.debug(
+				"Calling handleInvalidResponse method of GeoLocationAPIServiceImpl : {} from getGeoIPLocationDetails()",
+				response);
 		if (response.getStatus() == null || response.getStatus().equals(failResponseStatus)) {
 			throw new InvalidCountryException(response.getMessage());
 		}

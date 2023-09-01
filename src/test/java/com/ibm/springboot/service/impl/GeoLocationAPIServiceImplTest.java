@@ -7,10 +7,14 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Value;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import com.ibm.springboot.client.GeoLocationAPIClient;
 import com.ibm.springboot.dto.GeoAPIRequest;
@@ -19,7 +23,9 @@ import com.ibm.springboot.dto.GeoLocationAPIResponse;
 import com.ibm.springboot.exception.InvalidCountryException;
 import com.ibm.springboot.validator.ValidationService;
 
-class GeoLocationAPIServiceImplTest {
+@RunWith(MockitoJUnitRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+public class GeoLocationAPIServiceImplTest {
 
 	@Mock
 	private GeoLocationAPIClient client;
@@ -29,12 +35,6 @@ class GeoLocationAPIServiceImplTest {
 
 	@InjectMocks
 	private GeoLocationAPIServiceImpl geoLocationAPIService;
-
-	@Value("${app.geoLocation.countryCode}")
-	private String countryCode;
-
-	@Value("${app.geoLocation.failResponseStatus}")
-	private String failResponseStatus;
 
 	private GeoAPIRequest geoLocationRequest;
 
@@ -48,6 +48,8 @@ class GeoLocationAPIServiceImplTest {
 	void testValidResponseAndCountryCode() throws Exception {
 		geoLocationRequest = new GeoAPIRequest("username", "P@ssw0rd", "103.140.120.0");
 		GeoLocationAPIResponse response = new GeoLocationAPIResponse();
+		response.setCountryCode("CA");
+		response.setStatus("success");
 		response.setCity("Burnaby");
 
 		when(client.getIPDetailsByIp(geoLocationRequest.getIP())).thenReturn(response);
@@ -62,7 +64,7 @@ class GeoLocationAPIServiceImplTest {
 	void testInvalidResponseStatus() {
 		geoLocationRequest = new GeoAPIRequest("username", "P@ssw0rd", "192.168.1.1");
 		GeoLocationAPIResponse response = new GeoLocationAPIResponse();
-		response.setStatus(failResponseStatus);
+		response.setStatus("fail");
 		when(client.getIPDetailsByIp(geoLocationRequest.getIP())).thenReturn(response);
 
 		assertThrows(InvalidCountryException.class,

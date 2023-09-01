@@ -1,6 +1,7 @@
 package com.ibm.springboot.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -10,16 +11,26 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 
 import com.ibm.springboot.dto.GeoAPIRequest;
 import com.ibm.springboot.dto.GeoLocationAPICustomResponse;
 import com.ibm.springboot.service.GeoLocationAPIService;
 
+@RunWith(MockitoJUnitRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class IPLocationControllerTest {
 
+	@Mock
 	private IPLocationController ipLocationController;
+
+	@InjectMocks
 	private GeoLocationAPIService geoLocationAPIService;
 
 	@BeforeEach
