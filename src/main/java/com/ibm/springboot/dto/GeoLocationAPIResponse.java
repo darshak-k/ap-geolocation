@@ -3,6 +3,7 @@ package com.ibm.springboot.dto;
 public class GeoLocationAPIResponse {
 	private String query;
 	private String status;
+	private String message;
 	private String country;
 	private String countryCode;
 	private String regionName;
@@ -90,5 +91,13 @@ public class GeoLocationAPIResponse {
 
 	public void setTimezone(String timezone) {
 		this.timezone = timezone;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }

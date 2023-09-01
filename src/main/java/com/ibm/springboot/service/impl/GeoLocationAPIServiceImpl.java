@@ -57,7 +57,7 @@ public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 	private void handleInvalidResponse(GeoLocationAPIResponse response) {
 		// TODO Auto-generated method stub
 		if (response.getStatus() == null || response.getStatus().equals(failResponseStatus)) {
-			throw new InvalidCountryException("IP address is incorrect");
+			throw new InvalidCountryException(response.getMessage());
 		}
 	}
 
