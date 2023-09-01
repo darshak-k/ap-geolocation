@@ -11,12 +11,15 @@ import com.ibm.springboot.client.GeoLocationAPIClient;
 import com.ibm.springboot.dto.GeoLocationAPICustomResponse;
 import com.ibm.springboot.dto.GeoAPIRequest;
 import com.ibm.springboot.dto.GeoLocationAPIResponse;
+import com.ibm.springboot.exception.InvalidCountryException;
 import com.ibm.springboot.service.GeoLocationAPIService;
+import com.ibm.springboot.validator.ValidationService;
 
 @Service
 public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 	private Logger logger = LoggerFactory.getLogger(GeoLocationAPIServiceImpl.class);
 	private final GeoLocationAPIClient client;
+	private final ValidationService validateService;
 
 	@Value("${app.geoLocation.countryCode}")
 	private String countryCode;
@@ -24,17 +27,38 @@ public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 	@Value("${app.geoLocation.failResponseStatus}")
 	private String failResponseStatus;
 
-	public GeoLocationAPIServiceImpl(GeoLocationAPIClient client) {
+	public GeoLocationAPIServiceImpl(GeoLocationAPIClient client, ValidationService validateService) {
 		this.client = client;
+		this.validateService = validateService;
 	}
 
 	@Override
 	public GeoLocationAPICustomResponse getGeoIPLocationDetails(GeoAPIRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		logger.debug("Calling validate method of ValidateService : {} from getIPDetails()", request);
+		validateService.validate(request);
+
 		GeoLocationAPIResponse response = client.getIPDetailsByIp(request.getIP());
 
+		handleInvalidResponse(response);
+
+		handleInvalidIpCountry(response);
+
 		return new GeoLocationAPICustomResponse(UUID.randomUUID(), response.getQuery(), response.getCity());
+	}
+
+	private void handleInvalidIpCountry(GeoLocationAPIResponse response) {
+		// TODO Auto-generated method stub
+		if (response.getCountryCode() == null || !response.getCountryCode().equals(countryCode)) {
+			throw new InvalidCountryException("IP address does not belong to canada");
+		}
+	}
+
+	private void handleInvalidResponse(GeoLocationAPIResponse response) {
+		// TODO Auto-generated method stub
+		if (response.getStatus() == null || response.getStatus().equals(failResponseStatus)) {
+			throw new InvalidCountryException("IP address is incorrect");
+		}
 	}
 
 }
