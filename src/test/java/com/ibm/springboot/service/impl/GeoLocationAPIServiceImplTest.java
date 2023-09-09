@@ -12,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import com.ibm.springboot.client.GeoLocationAPIClient;
@@ -41,7 +39,7 @@ public class GeoLocationAPIServiceImplTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		geoLocationAPIService = new GeoLocationAPIServiceImpl(client, validateService);
+		geoLocationAPIService = new GeoLocationAPIServiceImpl(client, validateService, "CA", "fail");
 	}
 
 	@Test

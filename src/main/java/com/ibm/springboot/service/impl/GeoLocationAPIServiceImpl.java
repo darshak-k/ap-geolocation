@@ -8,28 +8,40 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ibm.springboot.client.GeoLocationAPIClient;
-import com.ibm.springboot.dto.GeoLocationAPICustomResponse;
 import com.ibm.springboot.dto.GeoAPIRequest;
+import com.ibm.springboot.dto.GeoLocationAPICustomResponse;
 import com.ibm.springboot.dto.GeoLocationAPIResponse;
 import com.ibm.springboot.exception.InvalidCountryException;
 import com.ibm.springboot.service.GeoLocationAPIService;
 import com.ibm.springboot.validator.ValidationService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
-	private Logger logger = LoggerFactory.getLogger(GeoLocationAPIServiceImpl.class);
 	private final GeoLocationAPIClient client;
 	private final ValidationService validateService;
 
-	@Value("${app.geoLocation.countryCode}")
 	private String countryCode;
 
-	@Value("${app.geoLocation.failResponseStatus}")
 	private String failResponseStatus;
 
-	public GeoLocationAPIServiceImpl(GeoLocationAPIClient client, ValidationService validateService) {
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public String getFailResponseStatus() {
+		return failResponseStatus;
+	}
+
+	public GeoLocationAPIServiceImpl(GeoLocationAPIClient client, ValidationService validateService,
+			@Value("${app.geoLocation.countryCode}") String countryCode,
+			@Value("${app.geoLocation.failResponseStatus}") String failResponseStatus) {
 		this.client = client;
 		this.validateService = validateService;
+		this.countryCode = countryCode;
+		this.failResponseStatus = failResponseStatus;
 	}
 
 	@Override
@@ -53,7 +65,7 @@ public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 				"Calling handleInvalidIpCountry method of GeoLocationAPIServiceImpl : {} from getGeoIPLocationDetails()",
 				response);
 
-		if (response.getCountryCode() == null || !response.getCountryCode().equals(countryCode)) {
+		if (response.getCountryCode() == null || !response.getCountryCode().equals(getCountryCode())) {
 			throw new InvalidCountryException("IP address does not belong to canada");
 		}
 	}
@@ -63,7 +75,7 @@ public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 		logger.debug(
 				"Calling handleInvalidResponse method of GeoLocationAPIServiceImpl : {} from getGeoIPLocationDetails()",
 				response);
-		if (response.getStatus() == null || response.getStatus().equals(failResponseStatus)) {
+		if (response.getStatus() == null || response.getStatus().equals(getFailResponseStatus())) {
 			throw new InvalidCountryException(response.getMessage());
 		}
 	}
