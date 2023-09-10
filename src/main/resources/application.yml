@@ -1,0 +1,42 @@
+server:
+  error:
+    include-exception: 'false'
+    include-binding-errors: always
+    include-message: always
+    include-stacktrace: never
+app:
+  geoLocation:
+    failResponseStatus: fail
+    countryCode: CA
+  geoip:
+    config:
+      url: http://ip-api.com/json/
+      service: feignGeoLocationAPIService
+spring:
+  cloud:
+    function:
+      definition: kafkaConsumer;
+    stream:
+      bindings:
+        producer-out-0:
+          destination: first-topic
+        kafkaConsumer-in-0:
+          destination: first-topic
+      kafka:
+        binder:
+          brokers: localhost:9092
+ 
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: myGroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+          
+      

@@ -29,6 +29,6 @@ public class IPLocationController {
 				request);
 		return ResponseEntity.ok(geoLocationAPIService.getGeoIPLocationDetails(request));
 	}
-	
+
 	
 }

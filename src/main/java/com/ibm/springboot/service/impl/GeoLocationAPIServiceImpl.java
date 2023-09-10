@@ -8,18 +8,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ibm.springboot.client.GeoLocationAPIClient;
-import com.ibm.springboot.dto.GeoAPIRequest;
 import com.ibm.springboot.dto.GeoLocationAPICustomResponse;
+import com.ibm.springboot.dto.GeoAPIRequest;
 import com.ibm.springboot.dto.GeoLocationAPIResponse;
 import com.ibm.springboot.exception.InvalidCountryException;
 import com.ibm.springboot.service.GeoLocationAPIService;
 import com.ibm.springboot.validator.ValidationService;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
+	private Logger logger = LoggerFactory.getLogger(GeoLocationAPIServiceImpl.class);
 	private final GeoLocationAPIClient client;
 	private final ValidationService validateService;
 
@@ -53,7 +51,6 @@ public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 		GeoLocationAPIResponse response = client.getIPDetailsByIp(request.getIP());
 
 		handleInvalidResponse(response);
-
 		handleInvalidIpCountry(response);
 
 		return new GeoLocationAPICustomResponse(UUID.randomUUID(), response.getQuery(), response.getCity());
@@ -61,6 +58,7 @@ public class GeoLocationAPIServiceImpl implements GeoLocationAPIService {
 
 	private void handleInvalidIpCountry(GeoLocationAPIResponse response) {
 		// TODO Auto-generated method stub
+
 		logger.debug(
 				"Calling handleInvalidIpCountry method of GeoLocationAPIServiceImpl : {} from getGeoIPLocationDetails()",
 				response);
