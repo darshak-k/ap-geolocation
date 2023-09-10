@@ -5,6 +5,7 @@ import java.util.function.IntPredicate;
 import org.springframework.stereotype.Service;
 
 import com.ibm.springboot.dto.GeoAPIRequest;
+import com.ibm.springboot.exception.ExceptionConstantMessage;
 import com.ibm.springboot.exception.InvalidIpException;
 import com.ibm.springboot.exception.InvalidPasswordException;
 import com.ibm.springboot.exception.InvalidUsername;
@@ -24,36 +25,38 @@ public class ValidateServiceImpl implements ValidationService {
 	private void validatePassword(String password) throws Exception {
 		// TODO Auto-generated method stub
 		if (password == null || password.length() == 0) {
-			throw new InvalidPasswordException("Password is blank or empty.");
+			throw new InvalidPasswordException(ExceptionConstantMessage.BLANK_PASSOWRD);
 		}
+
+		StringBuilder errorMessage = new StringBuilder();
 
 		// TODO Auto-generated method stub
 
 		if (password.length() < 8) {
-			throw new InvalidPasswordException("Password should be greater than 8 characters.");
+			errorMessage.append(ExceptionConstantMessage.PASSOWORD_LENGTH_EXCEPTION);
 		}
 
 		if (!containsLowerCase(password)) {
-			throw new InvalidPasswordException("Password is not containing Lower case letter.");
+			errorMessage.append(ExceptionConstantMessage.NOT_CONTAINS_LOWERCASE_LETTER);
 		}
 
 		if (!containsUpperCase(password)) {
-			throw new InvalidPasswordException("Password is not containing Upper case letter.");
+			errorMessage.append(ExceptionConstantMessage.NOT_CONTAINS_UPPERCASE_LETTER);
 		}
 
 		if (!containsNumber(password)) {
-			throw new InvalidPasswordException("Password is not containing digit number.");
+			errorMessage.append(ExceptionConstantMessage.NOT_CONTAINS_DIGITS);
 		}
 
 		if (!containsSpecialCharacter(password)) {
-			throw new InvalidPasswordException("Password is not containing any special character.");
+			errorMessage.append(ExceptionConstantMessage.NOT_CONTAINS_SPECIAL_LETTER);
 		}
 	}
 
 	private void validateIp(String ip) throws Exception {
 		// TODO Auto-generated method stub
 		if (ip == null || ip.length() == 0) {
-			throw new InvalidIpException("Ip is blank or empty.");
+			throw new InvalidIpException(ExceptionConstantMessage.BLANK_IP);
 		}
 
 	}
@@ -61,7 +64,7 @@ public class ValidateServiceImpl implements ValidationService {
 	private void validateUserName(String username) throws Exception {
 		// TODO Auto-generated method stub
 		if (username == null || username.length() == 0) {
-			throw new InvalidUsername("Username is blank or empty.");
+			throw new InvalidUsername(ExceptionConstantMessage.BLANK_USERNAME);
 		}
 	}
 
