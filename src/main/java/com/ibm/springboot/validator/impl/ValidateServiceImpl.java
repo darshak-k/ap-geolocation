@@ -34,22 +34,31 @@ public class ValidateServiceImpl implements ValidationService {
 
 		if (password.length() < 8) {
 			errorMessage.append(ExceptionConstantMessage.PASSOWORD_LENGTH_EXCEPTION);
+			errorMessage.append(" ");
 		}
 
 		if (!containsLowerCase(password)) {
 			errorMessage.append(ExceptionConstantMessage.NOT_CONTAINS_LOWERCASE_LETTER);
+			errorMessage.append(" ");
 		}
 
 		if (!containsUpperCase(password)) {
 			errorMessage.append(ExceptionConstantMessage.NOT_CONTAINS_UPPERCASE_LETTER);
+			errorMessage.append(" ");
 		}
 
 		if (!containsNumber(password)) {
 			errorMessage.append(ExceptionConstantMessage.NOT_CONTAINS_DIGITS);
+			errorMessage.append(" ");
 		}
 
 		if (!containsSpecialCharacter(password)) {
 			errorMessage.append(ExceptionConstantMessage.NOT_CONTAINS_SPECIAL_LETTER);
+			errorMessage.append(" ");
+		}
+
+		if (!errorMessage.isEmpty()) {
+			throw new InvalidPasswordException(errorMessage.toString());
 		}
 	}
 
