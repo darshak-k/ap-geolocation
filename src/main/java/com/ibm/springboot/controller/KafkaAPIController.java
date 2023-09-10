@@ -25,6 +25,7 @@ public class KafkaAPIController {
 	@PostMapping("/")
 	public ResponseEntity<Void> produceKafkaMessage(@RequestBody Message message) throws Exception {
 		logger.info("Calling produceKafkaMessage() method of KafkaAPIController : {} from getGeoIPLocation()", message);
+
 		kafkaProducer.sendMessage(message);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
