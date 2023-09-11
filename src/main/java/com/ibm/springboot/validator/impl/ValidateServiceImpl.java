@@ -5,10 +5,10 @@ import java.util.function.IntPredicate;
 import org.springframework.stereotype.Service;
 
 import com.ibm.springboot.dto.GeoAPIRequest;
-import com.ibm.springboot.exception.ExceptionConstantMessage;
 import com.ibm.springboot.exception.InvalidIpException;
 import com.ibm.springboot.exception.InvalidPasswordException;
 import com.ibm.springboot.exception.InvalidUsername;
+import com.ibm.springboot.utils.ExceptionConstantMessage;
 import com.ibm.springboot.validator.ValidationService;
 
 @Service

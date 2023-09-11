@@ -1,4 +1,4 @@
-package com.ibm.springboot.exception;
+package com.ibm.springboot.utils;
 
 public class ExceptionConstantMessage {
 
@@ -10,7 +10,8 @@ public class ExceptionConstantMessage {
 	public final static String NOT_CONTAINS_SPECIAL_LETTER = "Password is not containing any special character.";
 
 	public final static String BLANK_IP = "Ip is blank or empty.";
-	public final static String BLANK_USERNAME =  "Username is blank or empty.";
+	public final static String BLANK_USERNAME = "Username is blank or empty.";
+
 	private ExceptionConstantMessage() {
 
 	}

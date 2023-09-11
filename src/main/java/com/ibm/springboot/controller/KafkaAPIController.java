@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ibm.springboot.dto.Message;
+import com.ibm.springboot.dto.User;
 import com.ibm.springboot.kafka.KafkaProducer;
 
 @RestController
@@ -22,11 +22,19 @@ public class KafkaAPIController {
 		this.kafkaProducer = kafkaProducer;
 	}
 
-	@PostMapping("/")
-	public ResponseEntity<Void> produceKafkaMessage(@RequestBody Message message) throws Exception {
-		logger.info("Calling produceKafkaMessage() method of KafkaAPIController : {} from getGeoIPLocation()", message);
+	@PostMapping("/kafka-template/publish")
+	public ResponseEntity<Void> produceKafkaMessageUsingKafkaTemplate(@RequestBody User user) throws Exception {
+		logger.info("Calling produceKafkaMessage() method of KafkaAPIController : {} from getGeoIPLocation()", user);
+		kafkaProducer.sendMessageUsingKafkaTemplate(user);
 
-		kafkaProducer.sendMessage(message);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@PostMapping("/stream-bridge/publish")
+	public ResponseEntity<Void> produceKafkaMessageUsingStreamBridge(@RequestBody User user) throws Exception {
+		logger.info("Calling produceKafkaMessage() method of KafkaAPIController : {} from getGeoIPLocation()", user);
+		kafkaProducer.sendMessageUsingStreamBridge(user);
+
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

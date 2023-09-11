@@ -4,6 +4,9 @@ server:
     include-binding-errors: always
     include-message: always
     include-stacktrace: never
+    
+    
+#APP SPECIFIC CUSTOM PROPERTIES
 app:
   geoLocation:
     failResponseStatus: fail
@@ -12,6 +15,8 @@ app:
     config:
       url: http://ip-api.com/json/
       service: feignGeoLocationAPIService
+      
+#SPRING PROPERTIES
 spring:
   cloud:
     function:
@@ -25,18 +30,23 @@ spring:
       kafka:
         binder:
           brokers: localhost:9092
- 
   kafka:
-    consumer:
-      bootstrap-servers: localhost:9092
-      group-id: myGroup
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
       bootstrap-servers: localhost:9092
+    consumer:
+      auto-offset-reset: earliest
+      bootstrap-servers: localhost:9092
+      group-id: group-id
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-
-          
-      
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    topic:
+      name: kafka-topic-0
+    topic-json:
+      name: kafka-json-topic-0
